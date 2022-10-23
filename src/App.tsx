@@ -1,8 +1,16 @@
 import React from 'react';
 import logo from './logo.svg';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import './App.css';
 
 function App() {
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket("ws://localhost:8080/echo/butim")
+
+  console.log(readyState)
+
+  const handleClickSendMessage = React.useCallback(() => sendMessage('hello'), [])
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +26,12 @@ function App() {
         >
           Learn React
         </a>
+        <button
+          onClick={handleClickSendMessage}
+          disabled={readyState !== ReadyState.OPEN}
+        >
+          Click Me to send 'Hello'
+        </button>
       </header>
     </div>
   );
